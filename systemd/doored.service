@@ -1,0 +1,15 @@
+[Unit]
+Description=Door Relay Daemon
+After=local-fs.target
+
+[Service]
+User=door
+PermissionsStartOnly=1
+ExecStartPre=/usr/local/bin/doored-init
+ExecStart=/usr/local/bin/doored
+ExecStartPost=/usr/local/bin/doored-init
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+{
+    "name": "doored",
+    "version": "0.1.0",
+    "description": "Door Relay Daemon",
+    "dependencies": {
+        "w1direct": "~0.6.6",
+        "i2c": "~0.1.8",
+        "onoff": "~1.0.2",
+        "nconf": ">=0.7.1",
+        "printf": ">=0.2.2",
+        "bunyan": "~1.3.6"
+    },
+    "bin": {
+        "doored": "bin/doored.js",
+        "doored-init": "bin/doored-init.sh"
+    }
+}
