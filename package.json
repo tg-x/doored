@@ -12,6 +12,7 @@
     },
     "bin": {
         "doored": "bin/doored.js",
-        "doored-init": "bin/doored-init.sh"
+        "doored-init": "bin/doored-init.sh",
+        "doored-backup": "bin/doored-backup.sh"
     }
 }

@@ -2,9 +2,9 @@
 
 ### initialize GPIO pins ###
 
-#i2c2=/sys/bus/i2c/devices/i2c-2
-#echo 0x20 > $i2c2/delete_device
-#echo pca9534 0x20 > $i2c2/new_device
+i2c2=/sys/bus/i2c/devices/i2c-2
+echo 0x20 > $i2c2/delete_device
+echo pca9534 0x20 > $i2c2/new_device
 
 gpio=/sys/class/gpio
 
@@ -30,16 +30,16 @@ gpios=(
   37 # P8.22 - magnet 6
   61 # P8.26 - magnet 7
 
-  45 # P8.11 - ds2482 reset
+  45 # P8.11 - ds2482-800 reset
 
-#  504 # PCA9534: pin 0
-#  505 # PCA9534: pin 1
-#  506 # PCA9534: pin 2
-#  507 # PCA9534: pin 3
-#  508 # PCA9534: pin 4
-#  509 # PCA9534: pin 5
-#  510 # PCA9534: pin 6
-#  511 # PCA9534: pin 7
+  504 # PCA9534: pin 0
+  505 # PCA9534: pin 1
+  506 # PCA9534: pin 2
+  507 # PCA9534: pin 3
+  508 # PCA9534: pin 4
+  509 # PCA9534: pin 5
+  510 # PCA9534: pin 6
+  511 # PCA9534: pin 7
 )
 
 for i in ${gpios[*]}; do

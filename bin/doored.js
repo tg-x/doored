@@ -10,7 +10,7 @@ var config = {
     },
     log: {
         path: '/var/log/doored/doored.log',
-        level: 'info'
+        level: 'info',
     },
     w1: {
         device: '/dev/i2c-2',
@@ -44,36 +44,68 @@ var db = new DB(config.db.path, log);
 var Gpio = require('onoff').Gpio;
 
 var masters = [
+    {
+        master: { name: 'master8', subType: '800', devFile: config.w1.device, address: 0x1c },
+        doors: [
+            new Door({ id: 'X1',
+                       gpio: [ new Gpio(72, 'low'),
+                               new Gpio(86, 'low'),
+                               new Gpio(504, 'low') ] }),
+            new Door({ id: 'X2',
+                       gpio: [ new Gpio(73, 'low'),
+                               new Gpio(87, 'low'),
+                               new Gpio(505, 'low')] }),
+            new Door({ id: 'X3',
+                       gpio: [ new Gpio(74, 'low'),
+                               new Gpio(88, 'low'),
+                               new Gpio(506, 'low')] }),
+            new Door({ id: 'X4',
+                       gpio: [ new Gpio(75, 'low'),
+                               new Gpio(89, 'low'),
+                               new Gpio(507, 'low')] }),
+            new Door({ id: 'X5',
+                       gpio: [ new Gpio(76, 'low'),
+                               new Gpio(36, 'low'),
+                               new Gpio(508, 'low')] }),
+            new Door({ id: 'X6',
+                       gpio: [ new Gpio(77, 'low'),
+                               new Gpio(37, 'low'),
+                               new Gpio(509, 'low')] }),
+/*
+            new Door({ id: 'X7',
+                       gpio: [ new Gpio(78, 'low'),
+                               new Gpio(61, 'low'),
+                               new Gpio(510, 'low')] }),
+            new Door({ id: 'X8',
+                       gpio: [ new Gpio(79, 'low'),
+                               new Gpio(511, 'low')] }),
+*/
+        ],
+    },
 /*
     {
         master: { name: 'master1', subType: '100', devFile: config.w1.device, address: 0x18 },
-        doors: [ new Door({ id: 9, gpio: [  ], log: log }) ],
+        doors: [ new Door({ id: 'P1',
+                            gpio: [  ] }) ],
     },
     {
         master: { name: 'master2', subType: '100', devFile: config.w1.device, address: 0x19 },
-        doors: [ new Door({ id: 10, gpio: [  ], log: log }) ],
+        doors: [ new Door({ id: 'P2',
+                            gpio: [  ] }) ],
     },
     {
         master: { name: 'master3', subType: '100', devFile: config.w1.device, address: 0x1a },
-        doors: [ new Door({ id: 11, gpio: [ ], log: log }) ],
+        doors: [ new Door({ id: 'P3',
+                            gpio: [ ] }) ],
     },
 */
     {
         master: { name: 'master4', subType: '100', devFile: config.w1.device, address: 0x1b },
-        doors: [ new Door({ id: 0, gpio: new Gpio(2, 'high'), invGpio: true, admin: true, log: log }) ],
-    },
-    {
-        master: { name: 'master8', subType: '800', devFile: config.w1.device, address: 0x1c },
-        doors: [
-            new Door({ id: 1, gpio: [ new Gpio(72, 'low'), new Gpio(86, 'low') ], log: log }),
-            new Door({ id: 2, gpio: [ new Gpio(73, 'low'), new Gpio(87, 'low') ], log: log }),
-            new Door({ id: 3, gpio: [ new Gpio(74, 'low'), new Gpio(88, 'low') ], log: log }),
-            new Door({ id: 4, gpio: [ new Gpio(75, 'low'), new Gpio(89, 'low') ], log: log }),
-            new Door({ id: 5, gpio: [ new Gpio(76, 'low'), new Gpio(36, 'low') ], log: log }),
-            new Door({ id: 6, gpio: [ new Gpio(77, 'low'), new Gpio(37, 'low') ], log: log }),
-            new Door({ id: 7, gpio: [ new Gpio(78, 'low'), new Gpio(61, 'low') ], log: log }),
-            new Door({ id: 8, gpio: [ new Gpio(79, 'low') ], log: log }),
-        ],
+        doors: [ new Door({ id: 'P4',
+                            gpio: [ new Gpio(2, 'high') ],
+                            invGpio: true,
+                            admin: true,
+                            logKeyId: false }) ],
     },
 ];
 
@@ -84,12 +116,12 @@ for (var i = 0; i < masters.length; i++)
     var m = masters[i];
     log.info('Initializing '+ m.master.name +'..');
     w1.registerDS2482Master(m.master);
-    var buses = (m.master.subType == '800') ? 8 : 1;
-    for (var j = 0; j < buses; j++)
+    for (var j = 0; j < m.doors.length; j++)
     {
         log.info('..bus '+ j);
         var door = m.doors[j];
-        door.set({db: db, w1: w1, master: m.master.name, bus: j});
+        door.set({name: db.getDoorName(door.id), db: db, log: log,
+                  w1: w1, master: m.master.name, bus: j});
         door.search();
         if (door.admin)
             adminDoor = door;
