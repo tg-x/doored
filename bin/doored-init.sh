@@ -2,9 +2,16 @@
 
 ### initialize GPIO pins ###
 
+init=/run/doored-init.pid
+echo $$ > $init
+
+echo "Initializing GPIO pins.."
+
 i2c2=/sys/bus/i2c/devices/i2c-2
 echo 0x20 > $i2c2/delete_device
 echo pca9534 0x20 > $i2c2/new_device
+
+sleep 1
 
 gpio=/sys/class/gpio
 
@@ -42,13 +49,26 @@ gpios=(
   511 # PCA9534: pin 7
 )
 
+reset=45
+
 for i in ${gpios[*]}; do
     dir=$gpio/gpio$i
     if [ ! -d $dir ]; then
         echo $i > $gpio/export
     fi
+    if [ "$i" = "$reset" ]; then
+        echo high > $dir/direction
+        sleep 1
+    fi
     echo low > $dir/direction
-    chown -R door $dir/
+    chown -R door $dir $dir/
 done
+
+chown door /dev/watchdog* $gpio/export
+
+sleep 1
+
+echo "GPIO initialization done."
+rm $init
 
 exit 0
