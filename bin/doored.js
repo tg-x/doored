@@ -193,7 +193,7 @@ function run()
         {
             log.info('..bus '+ j);
             var door = m.doors[j];
-            door.set({name: db.getDoorName(door.id), db: db, log: log, logKeyId: true,
+            door.set({name: db.getDoorName(door.id), db: db, log: log,
                       w1: w1, master: m.master.name, bus: j});
 
             if (door.admin)
