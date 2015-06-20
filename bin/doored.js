@@ -177,7 +177,7 @@ function run()
             master: { name: 'master4', subType: '100', devFile: config.w1.device, address: 0x1b },
             doors: [ new Door({ id: 'p4',
                                 admin: true,
-                                logKeyId: true }) ],
+                                logKeyId: false }) ],
         },
     ];
 
@@ -190,7 +190,7 @@ function run()
         {
             log.info('..bus '+ j);
             var door = m.doors[j];
-            door.set({name: db.getDoorName(door.id), db: db, log: log,
+            door.set({name: db.getDoorName(door.id), db: db, log: log, logKeyId: false,
                       w1: w1, master: m.master.name, bus: j});
 
             if (door.admin)
@@ -218,4 +218,3 @@ function run()
 
     log.info('Door Relay Daemon is ready.');
 }
-0
