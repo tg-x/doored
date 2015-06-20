@@ -16,28 +16,28 @@ sleep 1
 gpio=/sys/class/gpio
 
 gpios=(
-   2 # P9.22 - EHRPWM0A - red LED
-  22 # P8.19 - EHRPWM2A - green LED
-  23 # P8.13 - EHRPWM2B - blue LED
+   7 # P9.42 - ECAPPWM0 - red LED
+   3 # P9.21 - EHRPWM0B - green LED
+  51 # P9.16 - EHRPWM1A - blue LED
 
-  72 # P8.43 - strike 1
-  73 # P8.44 - strike 2
-  74 # P8.41 - strike 3
-  75 # P8.42 - strike 4
-  76 # P8.39 - strike 5
-  77 # P8.40 - strike 6
-  78 # P8.37 - strike 7
-  79 # P8.38 - strike 8
+  66 # P8.7 - strike 1
+  67 # P8.8 - strike 2
+  69 # P8.9 - strike 3
+  68 # P8.10 - strike 4
+  45 # P8.11 - strike 5
+  44 # P8.12 - strike 6
+  23 # P8.13 - strike 7
+  26 # P8.14 - strike 8
 
-  86 # P8.27 - magnet 1
-  87 # P8.29 - magnet 2
-  88 # P8.28 - magnet 3
-  89 # P8.30 - magnet 4
-  36 # P8.23 - magnet 5
-  37 # P8.22 - magnet 6
-  61 # P8.26 - magnet 7
+  47 # P8.15 - magnet 1
+  46 # P8.16 - magnet 2
+  27 # P8.17 - magnet 3
+  65 # P8.18 - magnet 4
+  49 # P9.23 - magnet 5
+  15 # P9.24 - magnet 6
+  14 # P9.26 - magnet 7
 
-  45 # P8.11 - ds2482-800 reset
+  22 # P9.19 - ds2482-800 reset
 
   504 # PCA9534: pin 0
   505 # PCA9534: pin 1
@@ -49,24 +49,22 @@ gpios=(
   511 # PCA9534: pin 7
 )
 
-reset=45
+reset=22
 
 for i in ${gpios[*]}; do
     dir=$gpio/gpio$i
     if [ ! -d $dir ]; then
         echo $i > $gpio/export
     fi
-    if [ "$i" = "$reset" ]; then
-        echo high > $dir/direction
-        sleep 1
-    fi
     echo low > $dir/direction
     chown -R door $dir $dir/
 done
 
-chown door /dev/watchdog* $gpio/export
+chown door /dev/i2c-2 /dev/watchdog* $gpio/export
 
 sleep 1
+
+echo high > $gpio/gpio$reset/direction
 
 echo "GPIO initialization done."
 rm $init

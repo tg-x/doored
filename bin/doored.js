@@ -110,8 +110,6 @@ function run()
 
     var Gpio = require('onoff').Gpio;
 
-    var resetGpio = new Gpio(45, 'low');
-    var resetting = false;
     var adminDoor;
 
     var masters = [
@@ -119,44 +117,43 @@ function run()
             master: { name: 'master8', subType: '800', devFile: config.w1.device, address: 0x1c },
             doors: [
                 new Door({ id: 'x1', idDevice: '01E6270618000069',
-                           gpioDoor: [ new Gpio(72, 'low'),
-                                       new Gpio(86, 'low'),
+                           gpioDoor: [ new Gpio(66, 'low'),
+                                       new Gpio(47, 'low'),
                                        new Gpio(504, 'low') ],
                            gpioAccess: [ new Gpio(504, 'low') ] }),
                 new Door({ id: 'x2', idDevice: '015040061800009C',
-                           gpioDoor: [ new Gpio(73, 'low'),
-                                   new Gpio(87, 'low'),
-                                   new Gpio(505, 'low') ],
+                           gpioDoor: [ new Gpio(67, 'low'),
+                                       new Gpio(46, 'low'),
+                                       new Gpio(505, 'low') ],
                            gpioAccess: [ new Gpio(505, 'low') ] }),
                 new Door({ id: 'x3', idDevice: '01345706180000AE',
-                           gpioDoor: [ new Gpio(74, 'low'),
-                                       new Gpio(88, 'low'),
+                           gpioDoor: [ new Gpio(69, 'low'),
+                                       new Gpio(27, 'low'),
                                        new Gpio(506, 'low') ],
                            gpioAccess: [ new Gpio(506, 'low') ] }),
                 new Door({ id: 'x4', idDevice: '015940061800000A',
-                           gpioDoor: [ new Gpio(75, 'low'),
-                                       new Gpio(89, 'low'),
+                           gpioDoor: [ new Gpio(68, 'low'),
+                                       new Gpio(65, 'low'),
                                        new Gpio(507, 'low') ],
                            gpioAccess: [ new Gpio(507, 'low') ] }),
                 new Door({ id: 'x5', idDevice: '017B1B0618000037',
-                           gpioDoor: [ new Gpio(76, 'low'),
-                                       new Gpio(36, 'low'),
+                           gpioDoor: [ new Gpio(45, 'low'),
+                                       new Gpio(49, 'low'),
                                        new Gpio(508, 'low') ],
                            gpioAccess: [ new Gpio(508, 'low') ] }),
                 new Door({ id: 'x6', idDevice: '0144F005180000DC',
-                           gpioDoor: [ new Gpio(77, 'low'),
-                                       new Gpio(37, 'low'),
+                           gpioDoor: [ new Gpio(44, 'low'),
+                                       new Gpio(15, 'low'),
                                        new Gpio(509, 'low') ],
                            gpioAccess: [ new Gpio(509, 'low') ] }),
-/*
                 new Door({ id: 'x7', idDevice: '017C1B06180000B2',
-                           gpioDoor: [ new Gpio(78, 'low'),
-                                   new Gpio(61, 'low'),
-                                   new Gpio(510, 'low') ] }),
+                           gpioDoor: [ new Gpio(23, 'low'),
+                                       new Gpio(14, 'low'),
+                                       new Gpio(510, 'low') ] }),
                 new Door({ id: 'x8', idDevice: '014BF005180000F8',
-                           gpioDoor: [ new Gpio(79, 'low'),
-                                   new Gpio(511, 'low') ] }),
-*/
+                           gpioDoor: [ new Gpio(26, 'low'),
+                                       new Gpio(511, 'low') ],
+                           idTimeout: 0 }),
             ],
         },
         /*
@@ -180,7 +177,7 @@ function run()
             master: { name: 'master4', subType: '100', devFile: config.w1.device, address: 0x1b },
             doors: [ new Door({ id: 'p4',
                                 admin: true,
-                                logKeyId: false }) ],
+                                logKeyId: true }) ],
         },
     ];
 
@@ -214,10 +211,11 @@ function run()
     var srv = new Server(config.server.port, config.server.address,
                          log, db, masters, adminDoor,
                          {
-                             red: new Gpio(2, 'high'),
-                             green: new Gpio(22, 'high'),
-                             blue: new Gpio(23, 'low'),
+                             red: new Gpio(7, 'high'),
+                             green: new Gpio(3, 'high'),
+                             blue: new Gpio(51, 'low'),
                          });
 
     log.info('Door Relay Daemon is ready.');
 }
+0
